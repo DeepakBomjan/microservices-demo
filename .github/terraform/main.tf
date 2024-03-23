@@ -18,7 +18,7 @@
 provider "google" {
   project = var.project_id
   region  = "us-central1"
-  zone    = "us-central1-a"
+  zone    = "us-central1-c"
 }
 
 terraform {
@@ -97,18 +97,19 @@ resource "google_project_iam_member" "gke_clusters_service_account_role_stackdri
 # The GKE cluster used for pull-request (PR) staging deployments.
 resource "google_container_cluster" "prs_gke_cluster" {
   name                = "prs-gke-cluster"
-  location            = "us-central1"
-  enable_autopilot    = true
+  location            = "us-central1-c"
+  # enable_autopilot    = true
+  initial_node_count = 3
   project             = var.project_id
   deletion_protection = true
   depends_on = [
     module.enable_google_apis
   ]
-  cluster_autoscaling {
-    auto_provisioning_defaults {
-      service_account = google_service_account.gke_clusters_service_account.email
-    }
-  }
+  # cluster_autoscaling {
+  #   auto_provisioning_defaults {
+  #     service_account = google_service_account.gke_clusters_service_account.email
+  #   }
+  # }
   # Need an empty ip_allocation_policy to overcome an error related to autopilot node pool constraints.
   # Workaround from https://github.com/hashicorp/terraform-provider-google/issues/10782#issuecomment-1024488630
   ip_allocation_policy {
