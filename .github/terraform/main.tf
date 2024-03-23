@@ -105,11 +105,11 @@ resource "google_container_cluster" "prs_gke_cluster" {
   depends_on = [
     module.enable_google_apis
   ]
-  # cluster_autoscaling {
-  #   auto_provisioning_defaults {
-  #     service_account = google_service_account.gke_clusters_service_account.email
-  #   }
-  # }
+  cluster_autoscaling {
+    auto_provisioning_defaults {
+      service_account = google_service_account.gke_clusters_service_account.email
+    }
+  }
   # Need an empty ip_allocation_policy to overcome an error related to autopilot node pool constraints.
   # Workaround from https://github.com/hashicorp/terraform-provider-google/issues/10782#issuecomment-1024488630
   ip_allocation_policy {
