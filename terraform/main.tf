@@ -40,10 +40,10 @@ module "enable_google_apis" {
 resource "google_container_cluster" "my_cluster" {
 
   name     = var.name
-  location = var.region
-
+  location = var.zone
+  initial_node_count = 3
   # Enabling autopilot for this cluster
-  enable_autopilot = true
+  # enable_autopilot = true
 
   # Setting an empty ip_allocation_policy to allow autopilot cluster to spin up correctly
   ip_allocation_policy {
@@ -69,7 +69,7 @@ module "gcloud" {
   create_cmd_entrypoint = "gcloud"
   # Module does not support explicit dependency
   # Enforce implicit dependency through use of local variable
-  create_cmd_body = "container clusters get-credentials ${local.cluster_name} --zone=${var.region} --project=${var.gcp_project_id}"
+  create_cmd_body = "container clusters get-credentials ${local.cluster_name} --zone=${var.zone} --project=${var.gcp_project_id}"
 }
 
 # Apply YAML kubernetes-manifest configurations
