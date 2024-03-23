@@ -18,7 +18,7 @@
 provider "google" {
   project = var.project_id
   region  = "us-central1"
-  zone    = "us-central1-a"
+  zone    = "us-central1-c"
 }
 
 terraform {
@@ -97,8 +97,9 @@ resource "google_project_iam_member" "gke_clusters_service_account_role_stackdri
 # The GKE cluster used for pull-request (PR) staging deployments.
 resource "google_container_cluster" "prs_gke_cluster" {
   name                = "prs-gke-cluster"
-  location            = "us-central1"
-  enable_autopilot    = true
+  location            = "us-central1-c"
+  # enable_autopilot    = true
+  initial_node_count = 3
   project             = var.project_id
   deletion_protection = true
   depends_on = [
